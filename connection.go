@@ -26,6 +26,7 @@ type Connection interface {
 type HttpConnection struct {
 	sync.Mutex
 	url               *url.URL
+	urlHeartBeat      string
 	broken            bool
 	heartbeatDuration time.Duration
 	heartbeatStop     chan bool
@@ -41,6 +42,10 @@ func NewHttpConnection(url *url.URL) *HttpConnection {
 	c.checkBroken()
 	go c.heartbeat()
 	return c
+}
+
+func (c *HttpConnection) SetUrlHeartBeat(url string) {
+	c.urlHeartBeat = url
 }
 
 // Close this connection.
@@ -82,7 +87,7 @@ func (c *HttpConnection) checkBroken() {
 	defer c.Unlock()
 
 	// TODO(oe) Can we use HEAD?
-	req, err := http.NewRequest("GET", c.url.String(), nil)
+	req, err := http.NewRequest("GET", c.url.String()+c.urlHeartBeat, nil)
 	if err != nil {
 		c.broken = true
 		return
