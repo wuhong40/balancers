@@ -40,8 +40,7 @@ func NewBalancerFromURL(urlHeartBeat string, urls ...string) (*Balancer, error) 
 		if u, err := url.Parse(rawurl); err != nil {
 			return nil, err
 		} else {
-			conn := balancers.NewHttpConnection(u)
-			conn.SetUrlHeartBeat(urlHeartBeat)
+			conn := balancers.NewHttpConnection(u, urlHeartBeat)
 			b.conns = append(b.conns, conn)
 		}
 	}

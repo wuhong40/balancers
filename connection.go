@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"sync"
 	"time"
+	"fmt"
 )
 
 // Connection is a single connection to a host. It is defined by a URL.
@@ -33,11 +34,12 @@ type HttpConnection struct {
 }
 
 // NewHttpConnection creates a new HTTP connection to the given URL.
-func NewHttpConnection(url *url.URL) *HttpConnection {
+func NewHttpConnection(url *url.URL, urlHeartBeat string) *HttpConnection {
 	c := &HttpConnection{
 		url:               url,
 		heartbeatDuration: DefaultHeartbeatDuration,
 		heartbeatStop:     make(chan bool),
+		urlHeartBeat: urlHeartBeat,
 	}
 	c.checkBroken()
 	go c.heartbeat()
@@ -89,6 +91,7 @@ func (c *HttpConnection) checkBroken() {
 	// TODO(oe) Can we use HEAD?
 	req, err := http.NewRequest("GET", c.url.String()+c.urlHeartBeat, nil)
 	if err != nil {
+		fmt.Println("GET error, url:%s err:%s", c.url.String() + c.urlHeartBeat, err.Error())
 		c.broken = true
 		return
 	}
