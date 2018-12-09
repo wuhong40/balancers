@@ -18,5 +18,5 @@ var (
 	UserAgent = "balancers/" + Version + " (" + runtime.GOOS + "-" + runtime.GOARCH + ")"
 
 	// DefaultHeartbeatDuration is the default time between heartbeat messages.
-	DefaultHeartbeatDuration = 30 * time.Second
+	DefaultHeartbeatDuration = 10 * time.Second
 )
