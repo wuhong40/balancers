@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"sync"
 
-	"github.com/wuhong40/balancers"
+	"github.com/youran0715/balancers"
 )
 
 // Balancer implements a round-robin balancer.
